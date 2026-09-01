@@ -1,0 +1,24 @@
+{
+  "name": "family-nutrition-planner",
+  "version": "1.3.0",
+  "private": true,
+  "description": "家庭营养 · 食材规划系统（本地 SQLite / 线上 Supabase Postgres 双模）",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "start:sqlite": "node --experimental-sqlite server/server.js",
+    "init:pg": "node scripts/init-pg.js",
+    "migrate:pg": "node scripts/migrate-sqlite-to-pg.js",
+    "test:pg": "node scripts/test-pg-pglite.js",
+    "offline": "node --experimental-sqlite scripts/make-offline-preview.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17"
+  }
+}

@@ -1,0 +1,23 @@
+# Render 部署蓝图（免费 Hobby 计划）
+# 用法：Render Dashboard → New → Blueprint → 选本仓库 → 应用
+services:
+  - type: web
+    # 服务名即 Render 子域名前缀 → 部署后网址为
+    # https://sp-2026-michael-nutrition-planner.onrender.com （以 SP 开头，符合罗斌要求）
+    name: sp-2026-michael-nutrition-planner
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install --omit=dev
+    # 本地/线上默认走 SQLite（零依赖），必须带 --experimental-sqlite 实验标志
+    startCommand: node --experimental-sqlite server/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: TZ
+        value: Australia/Sydney
+      # 可选：填了 Supabase 连接串就自动切 Postgres（持久化）；不填则走 SQLite（每次冷启动自动重新灌入种子数据）
+      - key: DATABASE_URL
+        sync: false

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>家庭营养规划 · 后台管理</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { background: var(--bg); }
+    .admin-wrap { max-width: 960px; margin: 0 auto; padding: 12px 14px 80px; }
+    .admin-head { background: linear-gradient(120deg, var(--toddler), var(--mom)); color: #fff; padding: 18px 16px; border-radius: 18px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(15,110,86,.18); }
+    .admin-head h1 { font-size: 18px; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+    .admin-head p { margin: 0; font-size: 12px; opacity: .92; }
+    .admin-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 10px; }
+    .admin-tabs .atab { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 13px; cursor: pointer; color: var(--text-2); }
+    .admin-tabs .atab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .asection { display: none; }
+    .asection.active { display: block; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+    .panel h3 { margin: 0 0 10px; font-size: 15px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label { font-size: 12px; color: var(--text-2); }
+    .field input, .field select, .field textarea { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit; }
+    .field textarea { min-height: 64px; resize: vertical; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+    .btn { padding: 10px 16px; border-radius: 12px; border: none; font-size: 14px; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-soft { background: var(--bg-2); color: var(--text); border: 1px solid var(--border); }
+    .btn-danger { background: #fff0f1; color: #d33; border: 1px solid #ffd5d8; }
+    .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .rows-title { font-size: 13px; color: var(--text-2); margin: 14px 0 8px; }
+    .recipe-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; cursor: pointer; }
+    .recipe-card.open { border-color: var(--primary); }
+    .recipe-card .rc-top { display: flex; justify-content: space-between; align-items: center; }
+    .recipe-card .rc-name { font-weight: 600; }
+    .week-grid { display: flex; flex-direction: column; gap: 6px; }
+    .week-row { display: grid; grid-template-columns: 52px repeat(6, 1fr); gap: 5px; align-items: center; font-size: 11px; }
+    .week-row.head { font-weight: 600; color: var(--text-2); }
+    .week-row .day { font-weight: 600; }
+    .week-row select { padding: 6px 4px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); font-size: 11px; }
+    .slot-cell { display: flex; flex-direction: column; gap: 3px; }
+    .slot-cell select { width: 100%; }
+    .pantry-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
+    .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--bg-2); color: var(--text-2); }
+    .msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; background: #1f2a24; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+    .msg.show { opacity: 1; }
+    .hint { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+    a.back { color: #fff; text-decoration: none; font-size: 12px; opacity: .9; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-head">
+      <h1>🛠️ 家庭营养规划 · 后台管理 <span id="app-version" class="app-version">1.0.0</span></h1>
+      <p>调整系统参数（营养标准 / 食谱库 / 周计划 / 库存），保存即写入 SQLite 数据库。 <a class="back" href="/">← 返回前台</a></p>
+    </div>
+
+    <div class="admin-tabs">
+      <div class="atab active" data-asec="members">👪 成员</div>
+      <div class="atab" data-asec="standards">📊 营养标准</div>
+      <div class="atab" data-asec="recipes">🍲 食谱库</div>
+      <div class="atab" data-asec="week">🗓️ 周计划</div>
+      <div class="atab" data-asec="pantry">🧺 库存</div>
+    </div>
+
+    <!-- 成员 -->
+    <div class="asection active" id="asec-members">
+      <div class="panel">
+        <h3>家庭成员（<span id="member-count">0</span> 人）</h3>
+        <p class="hint">添加每位成员并填写年龄 / 性别 / 身体问题，前台「方案」会据此生成专属营养目标与餐单。新增成员后前台顶部切换条即出现。</p>
+        <div class="btn-row"><button class="btn btn-primary" id="add-member">＋ 新增成员</button></div>
+        <div id="members-body"></div>
+      </div>
+    </div>
+
+    <!-- 营养标准 -->
+    <div class="asection" id="asec-standards">
+      <div class="panel">
+        <h3>每日营养素推荐量（RNI）</h3>
+        <p class="hint">数值依据中国 DRIs 2023，由成员的年龄 / 性别 / 身体问题自动推导，可在此手动微调。修改后前台「方案」页目标值同步更新。</p>
+        <div id="standards-body"></div>
+        <div class="btn-row"><button class="btn btn-primary" id="save-standards">保存标准</button></div>
+      </div>
+    </div>
+
+    <!-- 食谱库 -->
+    <div class="asection" id="asec-recipes">
+      <div class="panel">
+        <h3>食谱库（<span id="recipe-count">0</span> 条）</h3>
+        <p class="hint">点击卡片展开编辑。食材 / 步骤 / 营养以 JSON 编辑（食材每项含 name、g、cat；营养键同标准）。</p>
+        <div class="btn-row"><button class="btn btn-primary" id="add-recipe">＋ 新增食谱</button></div>
+        <div id="recipes-body"></div>
+      </div>
+    </div>
+
+    <!-- 周计划 -->
+    <div class="asection" id="asec-week">
+      <div class="panel">
+        <h3>本周 7 天餐食计划</h3>
+        <p class="hint">每餐按家庭成员分列，下拉选择食谱（共享菜可选 common 类）。保存后前台「今日 / 本周」按所选成员展示。删除成员会自动清理其餐次列。</p>
+        <div class="week-grid" id="week-body"></div>
+        <div class="btn-row"><button class="btn btn-primary" id="save-week">保存周计划</button></div>
+      </div>
+    </div>
+
+    <!-- 库存 -->
+    <div class="asection" id="asec-pantry">
+      <div class="panel">
+        <h3>现有食材库存</h3>
+        <div class="grid3" style="margin-bottom:8px">
+          <div class="field"><label>食材名</label><input id="p-name" placeholder="如 牛腩" /></div>
+          <div class="field"><label>数量</label><input id="p-qty" type="number" placeholder="如 300" /></div>
+          <div class="field"><label>单位</label>
+            <select id="p-unit"><option>g</option><option>kg</option><option>个</option><option>块</option><option>L</option></select>
+          </div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" id="p-add">添加入库</button></div>
+        <div id="pantry-body" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <script>
+    fetch("/api/version").then(function (r) { return r.json(); }).then(function (d) {
+      var el = document.getElementById("app-version");
+      if (el && d && d.version) el.textContent = d.version;
+    }).catch(function () {});
+  </script>
+  <script src="admin.js"></script>
+</body>
+</html>

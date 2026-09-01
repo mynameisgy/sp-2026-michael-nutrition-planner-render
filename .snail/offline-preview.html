@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#F2A0AB" />
+  <title>家庭营养 · 食材规划</title>
+  <style>
+/* ============================================================
+   家庭营养 · 食材规划 — 亲子风视觉（温暖 / 圆润 / 萌系）
+   三色体系：薄荷绿=女儿(幼儿) · 玫瑰粉=老婆(孕妇) · 暖橙=一锅两吃(共享)
+   ============================================================ */
+:root {
+  --bg: #FFF6F2;
+  --surface: #FFFFFF;
+  --surface-2: #FFEFE9;
+  --text: #3D3733;
+  --text-soft: #8C827B;
+  --text-hint: #B6ABA3;
+  --border: #F2E6DF;
+
+  /* 人物主题色 */
+  --toddler: #3FB89C;      /* 女儿 · 薄荷绿 */
+  --toddler-soft: #E1F5F0;
+  --mom: #EE8FA0;          /* 老婆 · 玫瑰粉（孕） */
+  --mom-soft: #FCE7EC;
+  --common: #F2A65A;       /* 共享 · 暖橙 */
+  --common-soft: #FCEBD8;
+
+  --brand-gradient: linear-gradient(120deg, #6FCBB4 0%, #F2A0AB 100%);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 6px 18px rgba(214,150,130,.12);
+  --shadow-soft: 0 2px 8px rgba(214,150,130,.10);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: linear-gradient(180deg, #FFF7F3 0%, #FCEFEA 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--brand-gradient);
+  padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
+  box-shadow: 0 4px 16px rgba(238,143,160,.25);
+}
+.brand-row { display: flex; align-items: center; gap: 10px; }
+.mascot {
+  position: relative; flex: 0 0 auto;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  animation: float 3.2s ease-in-out infinite;
+}
+.mascot-mom { transform: translateY(-1px); }
+.mascot-baby {
+  position: absolute; right: -4px; bottom: -4px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,.18);
+}
+.brand-text { flex: 1; min-width: 0; }
+.brand-title { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: .3px; }
+.brand-sub { font-size: 11px; color: rgba(255,255,255,.92); margin-top: 1px; }
+.ghost-btn {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,.7); background: rgba(255,255,255,.18);
+  color: #fff; font-size: 12px; padding: 5px 13px; border-radius: 20px; cursor: pointer;
+  backdrop-filter: blur(2px);
+}
+.ghost-btn:active { background: rgba(255,255,255,.34); }
+
+/* 左上角版本号角标 */
+.app-version {
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  color: #fff;
+  background: rgba(0,0,0,.22);
+  padding: 3px 8px;
+  border-radius: 999px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.header-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: 12px; }
+.app-header h1 {
+  font-size: 22px; font-weight: 700; margin: 0; color: #fff; letter-spacing: .5px;
+}
+.app-date { font-size: 12px; color: rgba(255,255,255,.9); }
+
+/* ---------- Main / pages ---------- */
+#view-container { padding: 14px 14px 96px; max-width: 720px; margin: 0 auto; }
+.page { animation: fade .2s ease; }
+.hidden { display: none !important; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none;} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+@keyframes pop { 0%{transform:scale(1)} 45%{transform:scale(1.28)} 100%{transform:scale(1)} }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 15px; margin-bottom: 13px; box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 15px; font-weight: 700; margin: 0 0 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title::before {
+  content: ""; width: 6px; height: 16px; border-radius: 4px;
+  background: var(--brand-gradient);
+}
+.card-sub { font-size: 12px; color: var(--text-soft); margin: 0 0 10px; line-height: 1.5; }
+
+/* ---------- Person badge ---------- */
+.badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+}
+.badge.toddler { background: var(--toddler-soft); color: var(--toddler); }
+.badge.mom { background: var(--mom-soft); color: var(--mom); }
+.badge.common { background: var(--common-soft); color: var(--common); }
+
+/* ---------- Meal row (today) ---------- */
+.meal-block { border-bottom: 1px dashed var(--border); padding: 12px 0; }
+.meal-block:last-child { border-bottom: none; }
+.meal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.meal-time {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  background: var(--surface-2); padding: 3px 10px; border-radius: 20px;
+}
+.meal-time small { font-weight: 400; color: var(--text-hint); margin-left: 6px; font-size: 11px; }
+.check {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--border);
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 14px;
+  transition: border-color .15s, background .15s;
+}
+.check.done { background: var(--toddler); border-color: var(--toddler); animation: pop .25s ease; }
+.meal-person { margin-bottom: 7px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.meal-person .who { font-size: 11px; color: var(--text-soft); width: 36px; flex: 0 0 auto; }
+.meal-dish { font-size: 15px; font-weight: 600; }
+.meal-dish.empty { color: var(--text-hint); font-weight: 400; font-style: italic; }
+
+/* ---------- Week grid ---------- */
+.week-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin: -2px -2px 12px; }
+.week-days {
+  flex: 0 0 auto; padding: 8px 13px; border-radius: 14px; background: var(--surface);
+  font-size: 12px; font-weight: 600; border: 1px solid var(--border); cursor: pointer; white-space: nowrap; color: var(--text-soft);
+  box-shadow: var(--shadow-soft);
+}
+.week-days.active { background: var(--brand-gradient); color: #fff; border-color: transparent; }
+.week-days small { display: block; font-size: 10px; opacity: .85; }
+.day-meal { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.day-meal:last-child { border-bottom: none; }
+.day-meal .slot { font-size: 12px; color: var(--text-soft); width: 70px; flex: 0 0 auto; font-weight: 600; }
+.day-meal .dishes { flex: 1; }
+.day-meal .d { font-size: 13px; margin: 2px 0; }
+.day-meal .shared { font-size: 11px; color: var(--common); margin-top: 3px; font-weight: 600; }
+
+/* ---------- Recipe list ---------- */
+.search-bar {
+  width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 14px;
+  font-size: 14px; background: var(--surface); margin-bottom: 10px; outline: none; box-shadow: var(--shadow-soft);
+}
+.search-bar:focus { border-color: var(--mom); }
+.chips { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 2px; }
+.chip {
+  flex: 0 0 auto; padding: 7px 13px; border-radius: 20px; background: var(--surface);
+  font-size: 12px; font-weight: 600; border: 1px solid var(--border); cursor: pointer; white-space: nowrap; color: var(--text-soft);
+  box-shadow: var(--shadow-soft);
+}
+.chip.active { background: var(--common); color: #fff; border-color: transparent; }
+.recipe {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px; margin-bottom: 11px; box-shadow: var(--shadow);
+}
+.recipe-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.recipe-name { font-size: 16px; font-weight: 700; }
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.tag { font-size: 10px; padding: 3px 8px; border-radius: 8px; background: var(--surface-2); color: var(--text-soft); font-weight: 600; }
+.tags-nutri .tag { background: var(--toddler-soft); color: var(--toddler); }
+.recipe-meta { font-size: 11px; color: var(--text-soft); margin-top: 6px; }
+.recipe-detail { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 10px; display: none; }
+.recipe-detail.open { display: block; }
+.recipe-detail h4 { font-size: 12px; margin: 11px 0 4px; color: var(--common); font-weight: 700; }
+.recipe-detail ul { margin: 4px 0; padding-left: 18px; font-size: 13px; }
+.recipe-detail p { font-size: 13px; margin: 4px 0; line-height: 1.6; }
+.nutri-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 7px; }
+.nutri-cell { background: var(--surface-2); border-radius: 10px; padding: 7px 8px; text-align: center; }
+.nutri-cell .v { font-size: 13px; font-weight: 700; color: var(--toddler); }
+.nutri-cell .l { font-size: 10px; color: var(--text-soft); }
+
+/* ---------- Shopping ---------- */
+.shop-group { margin-bottom: 16px; }
+.shop-group h3 { font-size: 13px; margin: 0 0 9px; display: flex; align-items: center; gap: 6px; color: var(--text); font-weight: 700; }
+.shop-group h3::before { content: ""; width: 5px; height: 14px; border-radius: 3px; background: var(--mom); }
+.shop-item {
+  display: flex; align-items: center; gap: 11px; padding: 11px 13px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; box-shadow: var(--shadow-soft);
+}
+.shop-item .box {
+  width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--border); flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; cursor: pointer;
+}
+.shop-item.done .box { background: var(--toddler); border-color: var(--toddler); animation: pop .25s ease; }
+.shop-item .name { flex: 1; font-size: 14px; font-weight: 500; }
+.shop-item.done .name { text-decoration: line-through; color: var(--text-hint); }
+.shop-item .qty { font-size: 13px; color: var(--text-soft); font-weight: 600; }
+.shop-progress { font-size: 12px; color: var(--text-soft); margin-bottom: 8px; }
+.bar-bg { height: 8px; background: var(--surface-2); border-radius: 6px; overflow: hidden; margin: 6px 0 14px; }
+.bar-fg { height: 100%; background: var(--brand-gradient); border-radius: 6px; transition: width .35s ease; }
+.shop-actions { display: flex; gap: 8px; margin-bottom: 14px; }
+.btn { flex: 1; padding: 11px; border-radius: 14px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-primary { background: var(--mom); color: #fff; box-shadow: 0 3px 10px rgba(238,143,160,.35); }
+.btn-soft { background: var(--surface-2); color: var(--text); }
+
+/* ---------- Pantry ---------- */
+.add-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.add-row input {
+  flex: 1; min-width: 88px; padding: 10px 11px; border: 1px solid var(--border); border-radius: 12px;
+  font-size: 13px; background: var(--surface); outline: none; box-shadow: var(--shadow-soft);
+}
+.add-row input:focus { border-color: var(--toddler); }
+.add-row select {
+  padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); outline: none;
+}
+.pantry-item {
+  display: flex; align-items: center; justify-content: space-between; padding: 11px 13px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; box-shadow: var(--shadow-soft);
+}
+.pantry-item .pi-left { font-size: 14px; font-weight: 600; }
+.pantry-item .pi-sub { font-size: 11px; color: var(--text-soft); font-weight: 400; }
+.pantry-item.urgent { border-color: var(--mom); background: var(--mom-soft); }
+.pantry-item .pi-del { color: var(--mom); font-size: 12px; background: none; border: none; cursor: pointer; padding: 4px 6px; font-weight: 600; }
+.urgent-tag { font-size: 10px; color: #fff; background: var(--mom); border-radius: 6px; padding: 1px 6px; margin-left: 6px; font-weight: 700; }
+
+/* ---------- Nutrition ---------- */
+.nutri-track { margin-bottom: 15px; }
+.nutri-track .row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.nutri-track .row .name { font-weight: 600; }
+.nutri-track .row .val { color: var(--text-soft); font-size: 12px; }
+.nutri-track .bar-bg { margin: 2px 0 0; }
+.track-fg { height: 100%; border-radius: 6px; }
+.track-fg.ok { background: var(--toddler); }
+.track-fg.low { background: #E6B23A; }
+.track-fg.over { background: var(--mom); }
+
+/* ---------- Tab bar ---------- */
+.tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  display: flex; background: rgba(255,255,255,.94); border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 -4px 16px rgba(214,150,130,.10);
+}
+.tab {
+  flex: 1; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 7px 0 6px; color: var(--text-hint); font-size: 10px; font-weight: 600;
+}
+.tab .tab-i {
+  width: 30px; height: 30px; border-radius: 11px; background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  transition: transform .15s;
+}
+.tab:active .tab-i { transform: scale(.9); }
+.tab.active { color: var(--mom); }
+.tab.active .tab-i { background: var(--brand-gradient); transform: translateY(-2px); box-shadow: 0 3px 10px rgba(238,143,160,.35); }
+
+/* ---------- misc ---------- */
+.section-h {
+  font-size: 13px; font-weight: 700; color: var(--text); margin: 18px 2px 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.section-h::before { content: "🌿"; font-size: 13px; }
+.empty-hint { text-align: center; color: var(--text-hint); font-size: 14px; padding: 30px 0; line-height: 1.7; }
+.note { font-size: 11px; color: var(--text-hint); margin-top: 8px; line-height: 1.6; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* ---------- 成员切换条 ---------- */
+.member-bar {
+  position: sticky; top: 0; z-index: 19;
+  display: flex; gap: 7px; overflow-x: auto; padding: 10px 14px 8px;
+  background: linear-gradient(180deg, #FFF7F3 0%, rgba(255,247,243,.92) 100%);
+  backdrop-filter: blur(6px);
+}
+.mchip {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px 6px 6px; border-radius: 999px; background: var(--surface);
+  border: 1px solid var(--border); cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-soft);
+  font-size: 13px; font-weight: 600; color: var(--text); transition: transform .12s;
+}
+.mchip:active { transform: scale(.96); }
+.mchip.active { box-shadow: 0 3px 10px rgba(214,150,130,.22); }
+.mchip .m-emoji {
+  width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.mchip.add { padding: 0; width: 36px; height: 36px; justify-content: center; font-size: 20px; color: var(--mom); font-weight: 700; text-decoration: none; }
+
+/* ---------- 成员卡头 ---------- */
+.member-card { border-width: 1.5px !important; }
+.mc-head { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
+.mc-avatar {
+  width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 22px; color: #fff; flex: 0 0 auto; box-shadow: var(--shadow-soft);
+}
+.mc-name { font-size: 16px; font-weight: 700; }
+.mc-sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+
+/* ---------- 适配说明 / 红绿灯 ---------- */
+.adapt-note {
+  font-size: 12px; line-height: 1.6; margin: 6px 0 0; padding: 7px 10px; border-radius: 10px;
+  background: var(--surface-2); color: var(--text-soft);
+}
+.adapt-note.avoid { background: #FDECEE; color: #B3343F; font-weight: 600; }
+.adapt-note.good { background: #E6F6EF; color: #2E8B6F; }
+.suit { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.suit.good { background: #E6F6EF; color: #2E8B6F; }
+.suit.avoid { background: #FDECEE; color: #B3343F; }
+.suit.neutral { background: var(--surface-2); color: var(--text-hint); }
+.badge.member { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+
+/* ---------- 方案页 ---------- */
+.target-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.target-cell { background: var(--surface-2); border-radius: 12px; padding: 10px 8px; text-align: center; }
+.target-cell .v { font-size: 16px; font-weight: 700; color: var(--toddler); }
+.target-cell .l { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+.target-cell .u { font-size: 10px; color: var(--text-hint); }
+.advice-list { margin: 4px 0; padding-left: 18px; font-size: 13px; line-height: 1.7; }
+.advice-list li { margin: 4px 0; }
+
+/* ---------- 后台成员卡 ---------- */
+.member-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; cursor: pointer; }
+.member-card.open { border-color: var(--mom); }
+.mc-top { display: flex; align-items: center; gap: 10px; }
+.mc-avatar { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex: 0 0 auto; }
+.mc-name { font-weight: 700; font-size: 15px; }
+.mc-edit { margin-top: 12px; }
+.cond-group { margin: 6px 0; }
+.cond-g-title { font-size: 11px; color: var(--text-soft); margin-bottom: 4px; }
+.cond-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.cond { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text); background: var(--surface-2); padding: 5px 10px; border-radius: 999px; cursor: pointer; }
+.cond input { margin: 0; }
+
+</style>
+</head>
+<body>
+<!-- SNAIL-VERSION-BADGE:START -->
+<!-- snail-version: V1.3.0 | commit: v1.3.0 | 2026-09-01 -->
+<div id="snail-version-badge" style="position:fixed;top:10px;left:12px;z-index:2147483647;padding:3px 10px;border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 12px/1.6 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.28);pointer-events:none;user-select:none;">V1.3.0</div>
+<!-- SNAIL-VERSION-BADGE:END -->
+  <header class="app-header">
+    <div class="brand-row">
+      <span id="app-version" class="app-version">1.3.0</span>
+      <div class="mascot" aria-hidden="true">
+        <span class="mascot-mom">👨‍👩‍👧‍👦</span>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">家庭营养小帮手</div>
+        <div class="brand-sub">按每位家庭成员的年龄 / 身体情况，定制专属餐单</div>
+      </div>
+      <button id="btn-reset" class="ghost-btn" title="重置全部数据">重置</button>
+    </div>
+    <div class="header-row">
+      <h1 id="app-title">今日</h1>
+      <span id="app-date" class="app-date"></span>
+    </div>
+  </header>
+
+  <!-- 家庭成员切换条 -->
+  <div class="member-bar" id="member-bar"></div>
+
+  <main id="view-container">
+    <section id="page-today" class="page"></section>
+    <section id="page-week" class="page hidden"></section>
+    <section id="page-recipes" class="page hidden"></section>
+    <section id="page-shopping" class="page hidden"></section>
+    <section id="page-pantry" class="page hidden"></section>
+    <section id="page-plan" class="page hidden"></section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab active" data-page="today"><span class="tab-i">📅</span><span>今日</span></button>
+    <button class="tab" data-page="week"><span class="tab-i">🗓️</span><span>本周</span></button>
+    <button class="tab" data-page="recipes"><span class="tab-i">🍲</span><span>食谱</span></button>
+    <button class="tab" data-page="shopping"><span class="tab-i">🛒</span><span>采购</span></button>
+    <button class="tab" data-page="pantry"><span class="tab-i">🧺</span><span>库存</span></button>
+    <button class="tab" data-page="plan"><span class="tab-i">📋</span><span>方案</span></button>
+  </nav>
+
+  <script>
+/* ---- 离线快照模式：以下 fetch 为本地替身，不发起真实网络请求 ---- */
+(function () {
+  window.__OFFLINE_PLANS = {"toddler":{"target":{"kcal":900,"protein":25,"calcium":600,"iron":9,"zinc":4,"vitA":310,"vitD":10,"vitC":40,"dha":100,"folate":150,"fiber":8},"advice":["处于幼儿期，每日能量约 900 kcal、蛋白质约 25 g（按女性参考量估算）。","食物质地要软烂、去骨去刺、防呛；少盐少糖，原味为主。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"mom":{"target":{"kcal":2100,"protein":85,"calcium":1000,"iron":29,"zinc":10,"vitA":770,"vitD":10,"vitC":115,"dha":200,"folate":600,"fiber":28},"advice":["处于成年期，每日能量约 2100 kcal、蛋白质约 85 g（按女性参考量估算）。","重点补叶酸、铁、钙与 DHA；少食多餐，避免生冷与酒精。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"child":{"target":{"kcal":1300,"protein":30,"calcium":800,"iron":10,"zinc":6,"vitA":360,"vitD":10,"vitC":50,"dha":100,"folate":150,"fiber":12},"advice":["处于学龄前期，每日能量约 1300 kcal、蛋白质约 30 g（按男性参考量估算）。","食物质地要软烂、去骨去刺、防呛；少盐少糖，原味为主。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"adult":{"target":{"kcal":2200,"protein":65,"calcium":800,"iron":12,"zinc":13,"vitA":800,"vitD":10,"vitC":100,"dha":200,"folate":400,"fiber":28},"advice":["处于成年期，每日能量约 2200 kcal、蛋白质约 65 g（按男性参考量估算）。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"elder":{"target":{"kcal":1600,"protein":60,"calcium":1000,"iron":12,"zinc":11,"vitA":800,"vitD":15,"vitC":100,"dha":250,"folate":400,"fiber":22},"advice":["处于老年期，每日能量约 1600 kcal、蛋白质约 60 g（按女性参考量估算）。","口味清淡、 soft 易咀嚼；保证优质蛋白与钙，预防肌少与骨折。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"}};
+  var DATA = {"version":"1.3.0","driver":"sqlite","generated_at":"2026-09-01T12:05:49.957Z","state":{"standards":{"toddler":{"kcal":900,"protein":25,"calcium":600,"iron":9,"zinc":4,"vitA":310,"vitD":10,"vitC":40,"dha":100,"folate":150,"fiber":8,"label":"幼儿（女儿 1.5岁）"},"mom":{"kcal":2250,"protein":85,"calcium":1000,"iron":29,"zinc":9.5,"vitA":770,"vitD":10,"vitC":115,"dha":200,"folate":600,"fiber":28,"label":"孕产妇（老婆）"},"child":{"kcal":1300,"protein":30,"calcium":800,"iron":10,"zinc":5.5,"vitA":360,"vitD":10,"vitC":50,"dha":100,"folate":150,"fiber":12,"label":"小孩（学龄 4-6岁）"},"adult":{"kcal":2200,"protein":65,"calcium":800,"iron":12,"zinc":12.5,"vitA":800,"vitD":10,"vitC":100,"dha":200,"folate":400,"fiber":28,"label":"中年人（你）"},"elder":{"kcal":1900,"protein":65,"calcium":1000,"iron":12,"zinc":11,"vitA":800,"vitD":15,"vitC":100,"dha":250,"folate":400,"fiber":25,"label":"老人（祖辈 65+）"}},"members":[{"id":"toddler","name":"女儿","emoji":"👶","color":"#3FB89C","gender":"female","ageYears":1,"ageMonths":6,"relation":"女儿","conditions":[],"activity":"moderate","notes":"幼儿期，食物质地软烂、去骨去刺、防呛","sort":1},{"id":"mom","name":"老婆","emoji":"🤰","color":"#EE8FA0","gender":"female","ageYears":31,"ageMonths":0,"relation":"老婆","conditions":["pregnancy"],"activity":"moderate","notes":"孕晚期","sort":2},{"id":"child","name":"学龄小孩","emoji":"🧒","color":"#6F9BE8","gender":"male","ageYears":5,"ageMonths":0,"relation":"孩子","conditions":[],"activity":"moderate","notes":"学龄期","sort":3},{"id":"adult","name":"本人","emoji":"🧑","color":"#F2A65A","gender":"male","ageYears":35,"ageMonths":0,"relation":"本人","conditions":[],"activity":"moderate","notes":"中年","sort":4},{"id":"elder","name":"祖辈","emoji":"👵","color":"#B58BD6","gender":"female","ageYears":68,"ageMonths":0,"relation":"外婆","conditions":[],"activity":"moderate","notes":"老年期，清淡软烂","sort":5}],"recipes":[{"id":"r1","name":"番茄炖牛腩","who":"common","tags":["补铁","高蛋白","一锅两吃"],"time":60,"ing":[{"name":"牛腩","g":300,"cat":"蛋白"},{"name":"番茄","g":300,"cat":"蔬菜"},{"name":"洋葱","g":80,"cat":"蔬菜"},{"name":"胡萝卜","g":100,"cat":"蔬菜"}],"steps":["牛腩切块焯水","番茄去皮切块，洋葱切丁","少油炒香洋葱，下番茄炒出汁","加牛腩与水炖1小时","最后20分钟下胡萝卜"],"split":"幼儿：牛腩胡萝卜捞出剁碎、去番茄皮，配软饭浇汁。孕妇：原锅食用，配杂粮饭+一把焯菠菜（补叶酸）。","nutri":{"kcal":420,"protein":32,"calcium":60,"iron":6,"zinc":4,"vitA":300,"vitD":0.5,"vitC":25,"dha":0.2,"folate":180,"fiber":4}},{"id":"r10","name":"清蒸鲈鱼","who":"common","tags":["补蛋白","补DHA"],"time":20,"ing":[{"name":"鲈鱼","g":200,"cat":"蛋白"}],"steps":["鱼洗净两面划刀","铺姜葱蒸9分钟","淋热油与生抽"],"split":"刺少适合幼儿，去刺拆肉；孕妇整块。","nutri":{"kcal":170,"protein":28,"calcium":30,"iron":0.4,"zinc":0.4,"vitA":20,"vitD":2,"vitC":0,"dha":0.4,"folate":10,"fiber":0}},{"id":"r11","name":"杂蔬炒饭","who":"common","tags":["快手"],"time":15,"ing":[{"name":"米饭","g":200,"cat":"主食"},{"name":"鸡蛋","g":50,"cat":"蛋白"},{"name":"胡萝卜","g":50,"cat":"蔬菜"},{"name":"豌豆","g":50,"cat":"蔬菜"}],"steps":["蛋炒散","下米饭与蔬菜粒翻炒","少盐调味"],"split":"幼儿：饭粒压软、蔬菜切细。孕妇：加玉米粒更丰富。","nutri":{"kcal":320,"protein":9,"calcium":30,"iron":1.5,"zinc":1.2,"vitA":80,"vitD":0.2,"vitC":12,"dha":0,"folate":30,"fiber":3}},{"id":"r12","name":"什锦汤面","who":"common","tags":["快手"],"time":15,"ing":[{"name":"面条","g":120,"cat":"主食"},{"name":"鸡蛋","g":50,"cat":"蛋白"},{"name":"青菜","g":80,"cat":"蔬菜"},{"name":"番茄","g":80,"cat":"蔬菜"}],"steps":["番茄炒出汁加水煮开","下面与青菜","卧蛋或蛋花"],"split":"幼儿：面煮更软、剪短。孕妇：正常。","nutri":{"kcal":300,"protein":12,"calcium":40,"iron":2,"zinc":1.5,"vitA":60,"vitD":0.3,"vitC":10,"dha":0,"folate":35,"fiber":3}},{"id":"r13","name":"小米粥蛋","who":"common","tags":["快手"],"time":30,"ing":[{"name":"小米","g":40,"cat":"主食"},{"name":"鸡蛋","g":50,"cat":"蛋白"}],"steps":["小米煮成粥","淋蛋花或卧蛋"],"split":"幼儿主食补充，孕妇亦可。","nutri":{"kcal":150,"protein":7,"calcium":20,"iron":1.2,"zinc":1,"vitA":120,"vitD":0.8,"vitC":0,"dha":0,"folate":30,"fiber":2}},{"id":"r14","name":"燕麦牛奶","who":"mom","tags":["补钙","补纤维"],"time":8,"ing":[{"name":"燕麦","g":40,"cat":"主食"},{"name":"牛奶","g":250,"cat":"奶"}],"steps":["燕麦加牛奶微波或煮","可加坚果"],"split":"孕妇专属加餐/早餐，补钙补纤维。","nutri":{"kcal":260,"protein":11,"calcium":300,"iron":1.5,"zinc":1.5,"vitA":60,"vitD":1.5,"vitC":2,"dha":0,"folate":20,"fiber":4}},{"id":"r15","name":"杂粮饭","who":"mom","tags":["补纤维"],"time":35,"ing":[{"name":"糙米","g":60,"cat":"主食"},{"name":"大米","g":60,"cat":"主食"}],"steps":["白米糙米1:1洗净","正常焖煮"],"split":"孕妇主食，控糖优选。","nutri":{"kcal":220,"protein":5,"calcium":15,"iron":1.5,"zinc":1.5,"vitA":0,"vitD":0,"vitC":0,"dha":0,"folate":20,"fiber":3}},{"id":"r16","name":"南瓜粥","who":"common","tags":["补维A","快手"],"time":25,"ing":[{"name":"南瓜","g":120,"cat":"蔬菜"},{"name":"大米","g":30,"cat":"主食"}],"steps":["南瓜切块与米同煮成粥","可压泥"],"split":"幼儿爱吃，孕妇亦可。","nutri":{"kcal":120,"protein":3,"calcium":25,"iron":0.8,"zinc":0.6,"vitA":400,"vitD":0,"vitC":8,"dha":0,"folate":15,"fiber":2}},{"id":"r17","name":"红烧排骨","who":"common","tags":["补钙","补蛋白"],"time":50,"ing":[{"name":"排骨","g":250,"cat":"蛋白"}],"steps":["排骨焯水","少油炒糖色（孕妇少糖）","加酱油炖软","收汁"],"split":"幼儿：肉剔骨剁碎、汤拌饭。孕妇：整块。","nutri":{"kcal":350,"protein":26,"calcium":200,"iron":2,"zinc":3,"vitA":30,"vitD":0.1,"vitC":2,"dha":0,"folate":8,"fiber":0}},{"id":"r18","name":"鸡肉时蔬","who":"common","tags":["补蛋白","一锅两吃"],"time":25,"ing":[{"name":"鸡胸","g":150,"cat":"蛋白"},{"name":"西兰花","g":100,"cat":"蔬菜"},{"name":"胡萝卜","g":50,"cat":"蔬菜"}],"steps":["鸡胸切片","蔬菜切小朵","少油快炒"],"split":"幼儿：鸡肉蔬菜切碎。孕妇：正常块。","nutri":{"kcal":200,"protein":22,"calcium":30,"iron":1.2,"zinc":1.8,"vitA":100,"vitD":0.2,"vitC":15,"dha":0.1,"folate":30,"fiber":3}},{"id":"r19","name":"全麦三明治","who":"mom","tags":["补钙","补纤维"],"time":8,"ing":[{"name":"全麦面包","g":80,"cat":"主食"},{"name":"鸡蛋","g":50,"cat":"蛋白"},{"name":"牛油果","g":50,"cat":"水果"}],"steps":["水煮蛋切片","牛油果压泥","夹入全麦面包"],"split":"孕妇早餐，补好脂肪与钙。","nutri":{"kcal":300,"protein":14,"calcium":150,"iron":2.5,"zinc":2,"vitA":80,"vitD":0.5,"vitC":8,"dha":0,"folate":40,"fiber":4}},{"id":"r2","name":"清蒸鳕鱼","who":"common","tags":["补蛋白","低汞"],"time":20,"ing":[{"name":"鳕鱼","g":150,"cat":"蛋白"},{"name":"姜","g":5,"cat":"蔬菜"}],"steps":["鱼块铺姜丝","水开后蒸8-10分钟","淋少许婴儿酱油（幼儿）/生抽（孕妇）"],"split":"两人同锅，幼儿去刺拆肉碾碎，孕妇直接食用。","nutri":{"kcal":180,"protein":28,"calcium":30,"iron":0.5,"zinc":0.4,"vitA":20,"vitD":2,"vitC":0,"dha":0.3,"folate":10,"fiber":0}},{"id":"r20","name":"软饭","who":"toddler","tags":["主食"],"time":30,"ing":[{"name":"大米","g":60,"cat":"主食"}],"steps":["米多加水煮更软烂"],"split":"幼儿主食基底。","nutri":{"kcal":200,"protein":4,"calcium":10,"iron":0.5,"zinc":0.6,"vitA":0,"vitD":0,"vitC":0,"dha":0,"folate":10,"fiber":1}},{"id":"r21","name":"酸奶坚果","who":"mom","tags":["补钙","补DHA"],"time":3,"ing":[{"name":"酸奶","g":200,"cat":"奶"},{"name":"核桃","g":20,"cat":"其他"}],"steps":["酸奶加碾碎核桃"],"split":"孕妇加餐，补好脂肪。","nutri":{"kcal":200,"protein":8,"calcium":200,"iron":0.8,"zinc":1.2,"vitA":40,"vitD":0.2,"vitC":2,"dha":0,"folate":15,"fiber":2}},{"id":"r22","name":"水果酸奶","who":"common","tags":["补钙","补维C"],"time":3,"ing":[{"name":"酸奶","g":150,"cat":"奶"},{"name":"蓝莓","g":50,"cat":"水果"}],"steps":["酸奶拌水果"],"split":"两人加餐，幼儿减半。","nutri":{"kcal":150,"protein":5,"calcium":150,"iron":0.4,"zinc":0.5,"vitA":30,"vitD":0.2,"vitC":15,"dha":0,"folate":20,"fiber":2}},{"id":"r23","name":"全麦馒头","who":"common","tags":["主食"],"time":5,"ing":[{"name":"全麦馒头","g":60,"cat":"主食"}],"steps":["蒸熟即可"],"split":"加餐主食。","nutri":{"kcal":160,"protein":5,"calcium":30,"iron":1.2,"zinc":0.8,"vitA":0,"vitD":0,"vitC":0,"dha":0,"folate":15,"fiber":2}},{"id":"r24","name":"蓝莓","who":"toddler","tags":["补维C","抗氧化"],"time":1,"ing":[{"name":"蓝莓","g":50,"cat":"水果"}],"steps":["洗净即可"],"split":"幼儿加餐，防呛切半。","nutri":{"kcal":60,"protein":1,"calcium":10,"iron":0.3,"zinc":0.2,"vitA":30,"vitD":0,"vitC":10,"dha":0,"folate":8,"fiber":2}},{"id":"r3","name":"番茄牛肉末","who":"common","tags":["补铁","高蛋白","一锅两吃"],"time":25,"ing":[{"name":"牛肉末","g":150,"cat":"蛋白"},{"name":"番茄","g":200,"cat":"蔬菜"}],"steps":["牛肉末炒散","下番茄炒出汁","少水略炖收汁"],"split":"幼儿：肉末更细，配软饭。孕妇：可加彩椒同炒，配杂粮饭。","nutri":{"kcal":260,"protein":22,"calcium":20,"iron":3,"zinc":3,"vitA":150,"vitD":0,"vitC":15,"dha":0,"folate":30,"fiber":2}},{"id":"r4","name":"虾仁豆腐","who":"common","tags":["补钙","高蛋白"],"time":20,"ing":[{"name":"虾仁","g":100,"cat":"蛋白"},{"name":"豆腐","g":200,"cat":"蛋白"}],"steps":["虾仁去壳开背","豆腐切块轻推","少油同焖，勾薄芡"],"split":"两人同锅，幼儿虾仁切小丁防呛。","nutri":{"kcal":200,"protein":20,"calcium":180,"iron":2,"zinc":1.5,"vitA":40,"vitD":0.3,"vitC":2,"dha":0.2,"folate":25,"fiber":1}},{"id":"r5","name":"香菇炖鸡","who":"common","tags":["补蛋白","一锅两吃"],"time":40,"ing":[{"name":"鸡腿","g":200,"cat":"蛋白"},{"name":"香菇","g":80,"cat":"蔬菜"}],"steps":["鸡腿剁块焯水","香菇泡发切片","同炖至软烂"],"split":"幼儿：鸡肉撕丝剁碎，香菇切碎。孕妇：整块食用，配饭。","nutri":{"kcal":240,"protein":26,"calcium":15,"iron":1.5,"zinc":2,"vitA":50,"vitD":0.2,"vitC":3,"dha":0.1,"folate":12,"fiber":1}},{"id":"r6","name":"猪肝（补铁）","who":"common","tags":["补铁","补叶酸"],"time":15,"ing":[{"name":"猪肝","g":100,"cat":"蛋白"},{"name":"菠菜","g":100,"cat":"蔬菜"}],"steps":["猪肝切薄片泡水去血水","快炒至变色","下菠菜同炒"],"split":"幼儿：肝泥/极细碎（30g）。孕妇：爆炒猪肝（50g）+菠菜。每周1次。","nutri":{"kcal":160,"protein":20,"calcium":8,"iron":22,"zinc":4,"vitA":4500,"vitD":0.1,"vitC":20,"dha":0.1,"folate":300,"fiber":0}},{"id":"r7","name":"香煎三文鱼","who":"common","tags":["补DHA","补蛋白"],"time":20,"ing":[{"name":"三文鱼","g":150,"cat":"蛋白"}],"steps":["鱼块厨房纸吸干","少油中小火每面3分钟","撒黑胡椒（孕妇）"],"split":"幼儿：去骨碾碎（30-50g）。孕妇：100-150g整块。","nutri":{"kcal":280,"protein":25,"calcium":15,"iron":0.8,"zinc":0.5,"vitA":30,"vitD":8,"vitC":0,"dha":1.5,"folate":10,"fiber":0}},{"id":"r8","name":"水蒸蛋","who":"common","tags":["高蛋白","快手"],"time":12,"ing":[{"name":"鸡蛋","g":100,"cat":"蛋白"}],"steps":["蛋打散加1.5倍温水","过筛去泡","中火蒸8分钟焖2分钟"],"split":"两人同食，幼儿可更嫩。","nutri":{"kcal":130,"protein":11,"calcium":50,"iron":1.5,"zinc":1,"vitA":160,"vitD":1,"vitC":0,"dha":0.1,"folate":40,"fiber":0}},{"id":"r9","name":"麻婆豆腐（少辣）","who":"common","tags":["补钙","补蛋白"],"time":18,"ing":[{"name":"豆腐","g":250,"cat":"蛋白"},{"name":"牛肉末","g":50,"cat":"蛋白"}],"steps":["豆腐切块焯水","少油炒肉末","加豆瓣酱（极少）与豆腐同烧","勾芡撒葱"],"split":"幼儿：免辣、肉末细。孕妇：微辣版。","nutri":{"kcal":220,"protein":14,"calcium":180,"iron":3,"zinc":1.5,"vitA":30,"vitD":0,"vitC":2,"dha":0,"folate":50,"fiber":2}}],"week":[{"label":"周一","slots":{"早":{"toddler":"r8","mom":"r8","child":"r8","adult":"r8","elder":"r8"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r1","mom":"r1","child":"r1","adult":"r1","elder":"r1"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r4","mom":"r4","child":"r4","adult":"r4","elder":"r4"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周二","slots":{"早":{"toddler":"r13","mom":"r13","child":"r13","adult":"r13","elder":"r13"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r2","mom":"r2","child":"r2","adult":"r2","elder":"r2"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r18","mom":"r18","child":"r18","adult":"r18","elder":"r18"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周三","slots":{"早":{"toddler":"r8","mom":"r8","child":"r8","adult":"r8","elder":"r8"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r6","mom":"r6","child":"r6","adult":"r6","elder":"r6"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r7","mom":"r7","child":"r7","adult":"r7","elder":"r7"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周四","slots":{"早":{"toddler":"r13","mom":"r13","child":"r13","adult":"r13","elder":"r13"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r9","mom":"r9","child":"r9","adult":"r9","elder":"r9"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r8","mom":"r8","child":"r8","adult":"r8","elder":"r8"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周五","slots":{"早":{"toddler":"r8","mom":"r8","child":"r8","adult":"r8","elder":"r8"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r5","mom":"r5","child":"r5","adult":"r5","elder":"r5"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r1","mom":"r1","child":"r1","adult":"r1","elder":"r1"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周六","slots":{"早":{"toddler":"r16","mom":"r16","child":"r16","adult":"r16","elder":"r16"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r10","mom":"r10","child":"r10","adult":"r10","elder":"r10"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r17","mom":"r17","child":"r17","adult":"r17","elder":"r17"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}},{"label":"周日","slots":{"早":{"toddler":"r13","mom":"r13","child":"r13","adult":"r13","elder":"r13"},"早点":{"toddler":"r22","mom":"r22","child":"r22","adult":"r22","elder":"r22"},"午":{"toddler":"r11","mom":"r11","child":"r11","adult":"r11","elder":"r11"},"午点":{"toddler":"r23","mom":"r23","child":"r23","adult":"r23","elder":"r23"},"晚":{"toddler":"r12","mom":"r12","child":"r12","adult":"r12","elder":"r12"},"睡前":{"toddler":"r14","mom":"r14","child":"r14","adult":"r14","elder":"r14"}}}],"pantry":[{"id":1,"name":"鸡蛋","qty":12,"unit":"个","bought":"2026-09-03","exp":"2026-08-20"},{"id":2,"name":"牛奶","qty":2,"unit":"L","bought":"2026-09-02","exp":"2026-08-27"},{"id":3,"name":"豆腐","qty":2,"unit":"块","bought":"2026-09-02","exp":"2026-08-30"},{"id":4,"name":"三文鱼","qty":300,"unit":"g","bought":"2026-09-02","exp":"2026-08-31"}],"shoppingChecked":{},"doneMeals":{}},"shopping":{"蛋白":[{"name":"鸡蛋","g":2530,"qty":"2.5 kg"},{"name":"牛腩","g":3000,"qty":"3 kg"},{"name":"虾仁","g":500,"qty":"500 g"},{"name":"豆腐","g":2248,"qty":"2.2 kg"},{"name":"鳕鱼","g":750,"qty":"750 g"},{"name":"鸡胸","g":750,"qty":"750 g"},{"name":"猪肝","g":500,"qty":"500 g"},{"name":"三文鱼","g":450,"qty":"450 g"},{"name":"牛肉末","g":250,"qty":"250 g"},{"name":"鸡腿","g":1000,"qty":"1 kg"},{"name":"鲈鱼","g":1000,"qty":"1 kg"},{"name":"排骨","g":1250,"qty":"1.3 kg"}],"奶":[{"name":"酸奶","g":5250,"qty":"5.3 kg"},{"name":"牛奶","g":6750,"qty":"6.8 kg"}],"水果":[{"name":"蓝莓","g":1750,"qty":"1.8 kg"}],"蔬菜":[{"name":"番茄","g":3400,"qty":"3.4 kg"},{"name":"洋葱","g":800,"qty":"800 g"},{"name":"胡萝卜","g":1500,"qty":"1.5 kg"},{"name":"姜","g":25,"qty":"25 g"},{"name":"西兰花","g":500,"qty":"500 g"},{"name":"菠菜","g":500,"qty":"500 g"},{"name":"香菇","g":400,"qty":"400 g"},{"name":"南瓜","g":600,"qty":"600 g"},{"name":"豌豆","g":250,"qty":"250 g"},{"name":"青菜","g":400,"qty":"400 g"}],"主食":[{"name":"全麦馒头","g":2100,"qty":"2.1 kg"},{"name":"燕麦","g":1400,"qty":"1.4 kg"},{"name":"小米","g":600,"qty":"600 g"},{"name":"大米","g":150,"qty":"150 g"},{"name":"米饭","g":1000,"qty":"1 kg"},{"name":"面条","g":600,"qty":"600 g"}]},"memberPlans":{"toddler":{"target":{"kcal":900,"protein":25,"calcium":600,"iron":9,"zinc":4,"vitA":310,"vitD":10,"vitC":40,"dha":100,"folate":150,"fiber":8},"advice":["处于幼儿期，每日能量约 900 kcal、蛋白质约 25 g（按女性参考量估算）。","食物质地要软烂、去骨去刺、防呛；少盐少糖，原味为主。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"mom":{"target":{"kcal":2100,"protein":85,"calcium":1000,"iron":29,"zinc":10,"vitA":770,"vitD":10,"vitC":115,"dha":200,"folate":600,"fiber":28},"advice":["处于成年期，每日能量约 2100 kcal、蛋白质约 85 g（按女性参考量估算）。","重点补叶酸、铁、钙与 DHA；少食多餐，避免生冷与酒精。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"child":{"target":{"kcal":1300,"protein":30,"calcium":800,"iron":10,"zinc":6,"vitA":360,"vitD":10,"vitC":50,"dha":100,"folate":150,"fiber":12},"advice":["处于学龄前期，每日能量约 1300 kcal、蛋白质约 30 g（按男性参考量估算）。","食物质地要软烂、去骨去刺、防呛；少盐少糖，原味为主。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"adult":{"target":{"kcal":2200,"protein":65,"calcium":800,"iron":12,"zinc":13,"vitA":800,"vitD":10,"vitC":100,"dha":200,"folate":400,"fiber":28},"advice":["处于成年期，每日能量约 2200 kcal、蛋白质约 65 g（按男性参考量估算）。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"},"elder":{"target":{"kcal":1600,"protein":60,"calcium":1000,"iron":12,"zinc":11,"vitA":800,"vitD":15,"vitC":100,"dha":250,"folate":400,"fiber":22},"advice":["处于老年期，每日能量约 1600 kcal、蛋白质约 60 g（按女性参考量估算）。","口味清淡、 soft 易咀嚼；保证优质蛋白与钙，预防肌少与骨折。"],"disclaimer":"本方案为家庭膳食参考，不替代医生或临床营养师的诊疗建议。"}}};
+  var ROUTES = {
+    '/api/state': DATA.state,
+    '/api/version': { version: DATA.version },
+    '/api/health': { ok: true, driver: DATA.driver, version: DATA.version },
+    '/api/standards': DATA.state.standards,
+    '/api/members': DATA.state.members,
+    '/api/recipes': DATA.state.recipes,
+    '/api/week': DATA.state.week,
+    '/api/pantry': DATA.state.pantry,
+    '/api/shopping': DATA.shopping
+  };
+  function reply(body, ok) {
+    return Promise.resolve({ ok: ok !== false, status: ok === false ? 404 : 200,
+      json: function () { return Promise.resolve(body); },
+      text: function () { return Promise.resolve(JSON.stringify(body)); } });
+  }
+  window.fetch = function (p, opts) {
+    opts = opts || {};
+    var path = String(p).split('?')[0];
+    var m = path.match(/^\/api\/kv\/(.+)$/);
+    if (m) {
+      var key = decodeURIComponent(m[1]);
+      if (opts.method === 'PUT') { try { DATA.state[key] = JSON.parse(opts.body || '{}').value; } catch (e) {} return reply({ ok: true }); }
+      return reply({ value: DATA.state[key] || {} });
+    }
+    if (Object.prototype.hasOwnProperty.call(ROUTES, path)) return reply(ROUTES[path]);
+    if (opts.method && opts.method !== 'GET') return reply({ ok: true });
+    return reply({ error: 'offline: no such route' }, false);
+  };
+})();
+</script>
+<script>
+/* 家庭营养 · 食材规划 — 前端逻辑（API 驱动，数据为后端 SQLite 单一来源）
+   成员模式：每位家庭成员是真实的人（年龄 / 性别 / 身体问题），全家共享周菜单，
+   但每位成员看到自己的适配说明、红灯提醒，并可一键生成专属周方案。 */
+(function () {
+  "use strict";
+
+  /* ---------- 营养追踪用到的营养素顺序（仅展示结构，数值来自后端标准） ---------- */
+  var NUTRI_KEYS = [
+    { k: "kcal", name: "能量", unit: "kcal" },
+    { k: "protein", name: "蛋白质", unit: "g" },
+    { k: "calcium", name: "钙", unit: "mg" },
+    { k: "iron", name: "铁", unit: "mg" },
+    { k: "zinc", name: "锌", unit: "mg" },
+    { k: "vitC", name: "维C", unit: "mg" },
+    { k: "dha", name: "DHA", unit: "mg" },
+    { k: "folate", name: "叶酸", unit: "μg" },
+    { k: "fiber", name: "膳食纤维", unit: "g" }
+  ];
+
+  /* 过敏食材（条件 → 需规避的食材名）；与 server/planner.js 保持一致 */
+  var ALLERGEN = {
+    allergy_egg: ["鸡蛋"], allergy_milk: ["牛奶", "酸奶"], allergy_seafood: ["鳕鱼", "三文鱼", "鲈鱼", "虾仁"],
+    allergy_nut: ["核桃"], allergy_soy: ["豆腐"], allergy_wheat: ["面条", "全麦面包", "全麦馒头"]
+  };
+  /* 身体问题 → 推荐优先标签（命中即为绿灯） */
+  var COND_HL = {
+    pregnancy: ["补叶酸", "补铁", "补钙", "补DHA"], lactation: ["补钙", "补蛋白", "补DHA"],
+    anemia: ["补铁", "补叶酸"], low_calcium: ["补钙"],
+    hypertension: ["补纤维"], diabetes: ["补纤维"], hyperlipidemia: ["补纤维"]
+  };
+
+  /* ---------- 状态（来自后端） ---------- */
+  var state = { standards: null, members: [], recipes: [], week: [], pantry: [], shoppingChecked: {}, doneMeals: {} };
+  var currentPage = "today";
+  var currentMember = null;       // 当前查看的成员 id
+  var recipeFilter = { q: "", tag: "全部" };
+  var lastShopping = null;
+  var planCache = {};             // 成员方案缓存（target/advice/week）
+
+  /* ---------- API ---------- */
+  function api(path, opts) {
+    opts = opts || {};
+    opts.headers = { "Content-Type": "application/json" };
+    return fetch(path, opts).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+  }
+  function showBackendError(detail) {
+    var box = document.getElementById("view-container");
+    if (box) {
+      box.innerHTML =
+        '<section class="page">' +
+        '<div style="margin:24px 16px;padding:20px;border-radius:14px;background:#fff5f6;' +
+        'border:1px solid #f3c6cc;color:#7a2b33;line-height:1.75;font-size:15px">' +
+        '<div style="font-size:18px;font-weight:700;margin-bottom:10px">⚠️ 连不上后端，数据没拿到</div>' +
+        '<div>这个页面所有数据都来自后端接口 <code>/api/state</code>，现在没取到，所以页面是空的（不是浏览器坏了）。</div>' +
+        '<div style="margin-top:12px">请在项目目录执行：</div>' +
+        '<pre style="margin:8px 0;padding:10px 12px;background:#fff;border:1px solid #f0d5d9;' +
+        'border-radius:8px;overflow:auto">node --experimental-sqlite server/server.js</pre>' +
+        '<div>然后用浏览器打开 <b>http://localhost:3000</b>（不要直接双击 index.html 打开）。</div>' +
+        (detail ? '<div style="margin-top:10px;font-size:13px;color:#a4686f">错误详情：' + esc(String(detail)) + '</div>' : '') +
+        "</div></section>";
+    }
+    toast("无法连接后端，请确认服务已启动 (node --experimental-sqlite server/server.js)");
+  }
+  function loadState(cb) {
+    api("/api/state").then(function (s) {
+      state = s;
+      if (!currentMember && state.members && state.members.length) currentMember = state.members[0].id;
+      cb && cb();
+    }).catch(function (e) { showBackendError(e && e.message ? e.message : e); });
+  }
+  function loadVersion() {
+    api("/api/version").then(function (d) {
+      var el = document.getElementById("app-version");
+      if (el && d && d.version) el.textContent = d.version;
+    }).catch(function () {});
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
+  }
+  function daysAgo(n) {
+    var d = new Date();
+    d.setDate(d.getDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+  function byId(id) {
+    for (var i = 0; i < state.recipes.length; i++) if (state.recipes[i].id === id) return state.recipes[i];
+    return null;
+  }
+  function todayIndex() {
+    var d = new Date().getDay();
+    return d === 0 ? 6 : d - 1;
+  }
+  function fmtG(g) {
+    if (g >= 1000) return (g / 1000).toFixed(g % 1000 === 0 ? 0 : 1) + " kg";
+    return Math.round(g) + " g";
+  }
+  function toast(msg) {
+    var t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 2400);
+  }
+
+  /* ---------- 成员工具 ---------- */
+  function members() { return state.members || []; }
+  function memberById(id) {
+    for (var i = 0; i < members().length; i++) if (members()[i].id === id) return members()[i];
+    return null;
+  }
+  function currentMemberObj() { return memberById(currentMember) || members()[0]; }
+  function memberAgeText(m) {
+    var y = m.ageYears || 0, mo = m.ageMonths || 0;
+    if (y < 1) return mo + "个月";
+    if (mo > 0) return y + "岁" + mo + "个月";
+    return y + "岁";
+  }
+  function portionFor(m) {
+    var age = (m.ageYears || 0) + (m.ageMonths || 0) / 12;
+    if (age < 3) return 0.5;
+    if (age < 6) return 0.8;
+    if (age < 18) return 0.9;
+    if (age >= 65) return 0.9;
+    return 1.0;
+  }
+  function memberBadge(m, extra) {
+    var c = m.color || "#888";
+    return '<span class="badge member" style="background:' + c + '22;color:' + c + '">' +
+      (m.emoji || "👤") + " " + esc(m.name) + (extra ? " · " + esc(extra) : "") + "</span>";
+  }
+  /* 前端适配性（与 server/planner.js 同源逻辑） */
+  function clientSuitability(m, recipe) {
+    if (!recipe) return { status: "neutral", reasons: [] };
+    var conds = m.conditions || [];
+    var exclude = [];
+    conds.forEach(function (c) { if (ALLERGEN[c]) exclude = exclude.concat(ALLERGEN[c]); });
+    var ings = (recipe.ing || []).map(function (i) { return i.name; });
+    var hit = exclude.filter(function (x) { return ings.indexOf(x) >= 0; });
+    if (hit.length) return { status: "avoid", reasons: ["含过敏食材：" + hit.join("、")] };
+    var hl = [];
+    conds.forEach(function (c) {
+      (COND_HL[c] || []).forEach(function (t) { if ((recipe.tags || []).indexOf(t) >= 0) hl.push(t); });
+    });
+    if (hl.length) return { status: "good", reasons: ["契合需求：" + hl.join("、")] };
+    return { status: "neutral", reasons: [] };
+  }
+  function suitBadge(suit) {
+    if (suit.status === "avoid") return '<span class="suit avoid">🔴 注意</span>';
+    if (suit.status === "good") return '<span class="suit good">🟢 合适</span>';
+    return '<span class="suit neutral">⚪ 普通</span>';
+  }
+
+  /* ---------- 渲染：成员切换条 ---------- */
+  function renderMemberBar() {
+    var bar = document.getElementById("member-bar");
+    if (!bar) return;
+    var html = "";
+    members().forEach(function (m) {
+      var active = m.id === currentMember ? " active" : "";
+      html += '<div class="mchip' + active + '" data-mid="' + esc(m.id) + '" style="' +
+        (m.id === currentMember ? "background:" + (m.color || "#888") + "22;border-color:" + (m.color || "#888") + ";" : "") + '">' +
+        '<span class="m-emoji" style="background:' + (m.color || "#888") + '22">' + (m.emoji || "👤") + "</span>" +
+        '<span class="m-name">' + esc(m.name) + "</span></div>";
+    });
+    html += '<a class="mchip add" href="/admin" title="添加 / 管理成员">＋</a>';
+    bar.innerHTML = html;
+    bar.querySelectorAll(".mchip[data-mid]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        currentMember = el.getAttribute("data-mid");
+        renderMemberBar();
+        if (currentPage === "today") renderToday();
+        else if (currentPage === "week") renderWeek();
+        else if (currentPage === "plan") renderPlan();
+      });
+    });
+  }
+
+  /* ---------- 营养计算（按当前成员的份量折算） ---------- */
+  function emptyNutri() { var o = {}; NUTRI_KEYS.forEach(function (n) { o[n.k] = 0; }); return o; }
+  function addNutri(acc, recipe, factor) {
+    if (!recipe) return;
+    var nu = recipe.nutri || {};
+    NUTRI_KEYS.forEach(function (n) { acc[n.k] += (nu[n.k] || 0) * factor; });
+  }
+  function dayNutriFor(day, mid) {
+    var acc = emptyNutri();
+    var m = memberById(mid);
+    var factor = m ? portionFor(m) : 1;
+    var slots = day.slots;
+    Object.keys(slots).forEach(function (sk) {
+      var rid = (slots[sk] || {})[mid];
+      if (rid) addNutri(acc, byId(rid), factor);
+    });
+    return acc;
+  }
+  function weekNutriFor(mid) {
+    var acc = emptyNutri();
+    state.week.forEach(function (day) {
+      var dn = dayNutriFor(day, mid);
+      NUTRI_KEYS.forEach(function (n) { acc[n.k] += dn[n.k]; });
+    });
+    return acc;
+  }
+
+  /* ---------- 渲染：今日（当前成员） ---------- */
+  function renderToday() {
+    if (!members().length) return;
+    var m = currentMemberObj();
+    var box = document.getElementById("page-today");
+    var idx = todayIndex();
+    var day = state.week[idx];
+    if (!day) return;
+    var dateStr = new Date().toLocaleDateString("zh-CN", { month: "long", day: "numeric", weekday: "long" });
+    document.getElementById("app-date").textContent = dateStr;
+
+    var html = "";
+    html += '<div class="card member-card" style="border-color:' + (m.color || "#888") + '55">' +
+      '<div class="mc-head"><span class="mc-avatar" style="background:' + (m.color || "#888") + '">' + (m.emoji || "👤") + "</span>" +
+      '<div><div class="mc-name">' + esc(m.name) + ' 的今日</div>' +
+      '<div class="mc-sub">' + esc(m.relation || "") + " · " + memberAgeText(m) + " · " + (m.gender === "male" ? "男" : "女") + "</div></div></div>";
+    html += '<p class="card-sub">👨‍👩‍👧‍👦 全家同餐的部分会标注「同餐」，分装时按 ' + esc(m.name) + " 的情况调整质地与调味。</p>";
+
+    var slots = day.slots;
+    var order = ["早", "早点", "午", "午点", "晚", "睡前"];
+    order.forEach(function (sk) {
+      var cell = slots[sk] || {};
+      var rid = cell[currentMember];
+      var shared = false;
+      if (!rid) {
+        var others = Object.keys(cell).map(function (k) { return cell[k]; }).filter(Boolean);
+        rid = others.length ? others[0] : null;
+        shared = true;
+      }
+      if (!rid) return;
+      var r = byId(rid);
+      var suit = clientSuitability(m, r);
+      var timeLabel = sk === "睡前" ? "睡前" : (sk === "早点" ? "上午加餐" : sk === "午点" ? "下午加餐" : sk);
+      html += '<div class="meal-block">';
+      html += '<div class="meal-head"><span class="meal-time">' + esc(timeLabel) + "</span>";
+      html += doneToggle(day.label, sk);
+      html += "</div>";
+      html += '<div class="meal-person"><span class="meal-dish">' + esc(r ? r.name : "—") + "</span> " + suitBadge(suit) + (shared ? ' <span class="badge common">🍳 同餐</span>' : "") + "</div>";
+      if (suit.reasons.length) html += '<div class="adapt-note ' + suit.status + '">⚠️ ' + esc(suit.reasons.join("；")) + "</div>";
+      if (r && r.split && !shared) html += '<div class="adapt-note">🍳 ' + esc(r.split) + "</div>";
+      html += "</div>";
+    });
+    html += "</div>";
+    box.innerHTML = html;
+    bindDoneToggles(day.label);
+  }
+  function doneToggle(dayLabel, slot) {
+    var key = dayLabel + "|" + slot;
+    var done = state.doneMeals[key];
+    return '<span class="check ' + (done ? "done" : "") + '" data-done="' + esc(key) + '">' + (done ? "✓" : "") + "</span>";
+  }
+  function bindDoneToggles(dayLabel) {
+    document.querySelectorAll("#page-today .check").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var key = el.getAttribute("data-done");
+        state.doneMeals[key] = !state.doneMeals[key];
+        renderToday();
+        api("/api/kv/doneMeals", { method: "PUT", body: JSON.stringify({ value: state.doneMeals }) })
+          .catch(function () { toast("保存失败，稍后重试"); });
+      });
+    });
+  }
+
+  /* ---------- 渲染：本周（当前成员） ---------- */
+  function renderWeek() {
+    if (!state.week.length || !members().length) return;
+    var m = currentMemberObj();
+    var box = document.getElementById("page-week");
+    var idx = todayIndex();
+    var html = '<div class="week-tabs" id="week-tabs">';
+    state.week.forEach(function (day, i) {
+      var active = i === idx ? " active" : "";
+      html += '<div class="week-days' + active + '" data-day="' + i + '">' + esc(day.label) + '<small>' + (i === idx ? "今天" : "") + "</small></div>";
+    });
+    html += "</div><div id='week-day'></div>";
+    box.innerHTML = html;
+    renderWeekDay(idx, m);
+    document.querySelectorAll("#week-tabs .week-days").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var i = parseInt(el.getAttribute("data-day"), 10);
+        document.querySelectorAll("#week-tabs .week-days").forEach(function (x) { x.classList.remove("active"); });
+        el.classList.add("active");
+        renderWeekDay(i, m);
+      });
+    });
+  }
+  function renderWeekDay(i, m) {
+    var day = state.week[i];
+    var html = '<div class="card member-card" style="border-color:' + (m.color || "#888") + '55">' +
+      '<div class="mc-head"><span class="mc-avatar" style="background:' + (m.color || "#888") + '">' + (m.emoji || "👤") + "</span>" +
+      '<div><div class="mc-name">' + esc(m.name) + " 的本周</div>" +
+      '<div class="mc-sub">' + esc(day.label) + " · 红灯表示该餐含需要注意的食材</div></div></div>";
+    var order = ["早", "早点", "午", "午点", "晚", "睡前"];
+    order.forEach(function (sk) {
+      var cell = day.slots[sk] || {};
+      var rid = cell[currentMember];
+      var shared = false;
+      if (!rid) {
+        var others = Object.keys(cell).map(function (k) { return cell[k]; }).filter(Boolean);
+        rid = others.length ? others[0] : null; shared = true;
+      }
+      if (!rid) return;
+      var r = byId(rid);
+      var suit = clientSuitability(m, r);
+      html += '<div class="day-meal"><span class="slot">' + esc(sk) + "</span><span class='dishes'>" +
+        "<div class='d'><span class='meal-dish'>" + esc(r ? r.name : "—") + "</span> " + suitBadge(suit) +
+        (shared ? " <span class='badge common'>🍳 同餐</span>" : "") + "</div>" +
+        (suit.reasons.length ? "<div class='adapt-note " + suit.status + "'>⚠️ " + esc(suit.reasons.join("；")) + "</div>" : "") +
+        (r && r.split && !shared ? "<div class='adapt-note'>🍳 " + esc(r.split) + "</div>" : "") +
+        "</span></div>";
+    });
+    html += "</div>";
+    document.getElementById("week-day").innerHTML = html;
+  }
+
+  /* ---------- 渲染：食谱 ---------- */
+  function renderRecipes() {
+    var box = document.getElementById("page-recipes");
+    var tags = ["全部", "补铁", "补钙", "补DHA", "补蛋白", "一锅两吃", "快手"];
+    var html = '<input class="search-bar" id="recipe-search" placeholder="搜索食谱名…" value="' + esc(recipeFilter.q) + '">';
+    html += '<div class="chips" id="recipe-chips">';
+    tags.forEach(function (t) {
+      html += '<div class="chip' + (recipeFilter.tag === t ? " active" : "") + '" data-tag="' + esc(t) + '">' + esc(t) + "</div>";
+    });
+    html += "</div><div id='recipe-list'></div>";
+    box.innerHTML = html;
+    document.getElementById("recipe-search").addEventListener("input", function (e) { recipeFilter.q = e.target.value; renderRecipeList(); });
+    document.querySelectorAll("#recipe-chips .chip").forEach(function (el) {
+      el.addEventListener("click", function () {
+        recipeFilter.tag = el.getAttribute("data-tag");
+        document.querySelectorAll("#recipe-chips .chip").forEach(function (x) { x.classList.remove("active"); });
+        el.classList.add("active");
+        renderRecipeList();
+      });
+    });
+    renderRecipeList();
+  }
+  function renderRecipeList() {
+    var list = document.getElementById("recipe-list");
+    var m = currentMemberObj();
+    var q = recipeFilter.q.trim().toLowerCase();
+    var filtered = state.recipes.filter(function (r) {
+      var okTag = recipeFilter.tag === "全部" || (r.tags || []).indexOf(recipeFilter.tag) >= 0;
+      var okQ = !q || r.name.toLowerCase().indexOf(q) >= 0 || (r.tags || []).join("").toLowerCase().indexOf(q) >= 0;
+      return okTag && okQ;
+    });
+    if (!filtered.length) { list.innerHTML = '<div class="empty-hint">没有匹配的食谱</div>'; return; }
+    var html = "";
+    filtered.forEach(function (r) {
+      var suit = m ? clientSuitability(m, r) : { status: "neutral", reasons: [] };
+      var whoBadge = r.who === "common" ? '<span class="badge common">🍳 共享</span>'
+        : '<span class="badge common">' + esc(r.who) + "</span>";
+      var tagsHtml = (r.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("");
+      html += '<div class="recipe">';
+      html += '<div class="recipe-top"><div><div class="recipe-name">' + esc(r.name) + "</div>" +
+        '<div class="recipe-tags">' + whoBadge + tagsHtml + "</div>" +
+        '<div class="recipe-meta">耗时 ' + r.time + " 分钟</div></div>" +
+        (m ? "<span class='suit " + suit.status + "' style='cursor:default'>" + (suit.status === "avoid" ? "🔴" : suit.status === "good" ? "🟢" : "⚪") + " 对" + esc(m.name) + "</span>" : "") +
+        '<span class="badge common" data-toggle="' + esc(r.id) + '" style="cursor:pointer">📋 详情</span></div>';
+      html += '<div class="recipe-detail" id="rd-' + esc(r.id) + '">';
+      html += "<h4>食材</h4><ul>" + r.ing.map(function (ing) { return "<li>" + esc(ing.name) + " " + ing.g + "g</li>"; }).join("") + "</ul>";
+      html += "<h4>做法</h4><ol>" + r.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>";
+      if (r.split) { html += "<h4>🍳 一锅两吃 · 分餐</h4><p>" + esc(r.split) + "</p>"; }
+      html += "<h4>营养（每份）</h4><div class='nutri-grid'>";
+      NUTRI_KEYS.forEach(function (n) {
+        html += '<div class="nutri-cell"><div class="v">' + Math.round(r.nutri[n.k] || 0) + '</div><div class="l">' + n.name + '</div></div>';
+      });
+      html += "</div></div>";
+      html += "</div>";
+    });
+    list.innerHTML = html;
+    document.querySelectorAll("#recipe-list [data-toggle]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var id = el.getAttribute("data-toggle");
+        var d = document.getElementById("rd-" + id);
+        d.classList.toggle("open");
+        el.textContent = d.classList.contains("open") ? "📋 收起" : "📋 详情";
+      });
+    });
+  }
+
+  /* ---------- 渲染：采购 ---------- */
+  function renderShopping() {
+    if (lastShopping) paintShopping(lastShopping);
+    else api("/api/shopping").then(function (g) { lastShopping = g; paintShopping(g); })
+      .catch(function () { var box = document.getElementById("page-shopping"); box.innerHTML = '<div class="empty-hint">无法获取采购清单</div>'; });
+  }
+  function paintShopping(groups) {
+    var box = document.getElementById("page-shopping");
+    var names = [];
+    Object.keys(groups).forEach(function (cat) { groups[cat].forEach(function (it) { names.push(it.name); }); });
+    var total = names.length;
+    var doneCount = names.filter(function (n) { return state.shoppingChecked[n]; }).length;
+    var pct = total ? Math.round(doneCount / total * 100) : 0;
+
+    var html = '<div class="card">';
+    html += '<div class="card-title">本周采购清单</div>';
+    html += '<div class="shop-progress">已备 ' + doneCount + " / " + total + " 项 · " + pct + "%</div>";
+    html += '<div class="bar-bg"><div class="bar-fg" style="width:' + pct + '%"></div></div>';
+    html += '<div class="shop-actions"><button class="btn btn-soft" id="shop-uncheck">重置勾选</button></div>';
+    html += '<p class="note">清单根据本周 7 天食谱自动汇总，并已扣除库存中已有的食材。勾选表示已购买/已有。</p>';
+    html += "</div>";
+
+    var catOrder = ["蛋白", "奶", "蔬菜", "水果", "主食", "其他"];
+    var sortedCats = Object.keys(groups).sort(function (a, b) { return catOrder.indexOf(a) - catOrder.indexOf(b); });
+    sortedCats.forEach(function (cat) {
+      html += '<div class="shop-group"><h3>' + esc(cat) + "</h3>";
+      groups[cat].forEach(function (it) {
+        var done = state.shoppingChecked[it.name];
+        html += '<div class="shop-item' + (done ? " done" : "") + '">' +
+          '<span class="box" data-shop="' + esc(it.name) + '">' + (done ? "✓" : "") + "</span>" +
+          '<span class="name">' + esc(it.name) + "</span>" +
+          '<span class="qty">' + fmtG(it.g) + "</span></div>";
+      });
+      html += "</div>";
+    });
+    if (!total) html += '<div class="empty-hint">本周食材已齐，无需额外采购 🎉</div>';
+    box.innerHTML = html;
+
+    document.querySelectorAll("#page-shopping [data-shop]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var n = el.getAttribute("data-shop");
+        state.shoppingChecked[n] = !state.shoppingChecked[n];
+        paintShopping(lastShopping);
+        api("/api/kv/shoppingChecked", { method: "PUT", body: JSON.stringify({ value: state.shoppingChecked }) })
+          .catch(function () { toast("保存失败，稍后重试"); });
+      });
+    });
+    var uncheck = document.getElementById("shop-uncheck");
+    if (uncheck) uncheck.addEventListener("click", function () {
+      state.shoppingChecked = {}; paintShopping(lastShopping);
+      api("/api/kv/shoppingChecked", { method: "PUT", body: JSON.stringify({ value: {} }) })
+        .catch(function () { toast("保存失败，稍后重试"); });
+    });
+  }
+
+  /* ---------- 渲染：库存 ---------- */
+  function renderPantry() {
+    var box = document.getElementById("page-pantry");
+    var html = '<div class="card"><div class="card-title">现有食材 · 库存</div>';
+    html += '<div class="add-row">' +
+      '<input id="p-name" placeholder="食材名" />' +
+      '<input id="p-qty" placeholder="数量" type="number" style="max-width:80px" />' +
+      '<select id="p-unit" style="padding:9px;border:1px solid var(--border);border-radius:10px;background:var(--surface)"><option>g</option><option>kg</option><option>个</option><option>块</option><option>L</option></select>' +
+      '<button class="btn btn-primary" id="p-add" style="flex:0 0 auto;padding:9px 16px">添加</button>' +
+      "</div>";
+    html += '<p class="note">临期（≤2天）会标红提醒，优先安排使用。</p></div>';
+    html += '<div id="pantry-list"></div>';
+    box.innerHTML = html;
+    document.getElementById("p-add").addEventListener("click", function () {
+      var name = document.getElementById("p-name").value.trim();
+      var qty = parseFloat(document.getElementById("p-qty").value);
+      var unit = document.getElementById("p-unit").value;
+      if (!name || !qty) return;
+      var payload = { name: name, qty: qty, unit: unit, bought: daysAgo(0), exp: daysAgo(-6) };
+      api("/api/pantry", { method: "POST", body: JSON.stringify(payload) }).then(function (row) {
+        state.pantry.push(row);
+        document.getElementById("p-name").value = "";
+        document.getElementById("p-qty").value = "";
+        renderPantryList();
+      }).catch(function () { toast("添加失败，稍后重试"); });
+    });
+    renderPantryList();
+  }
+  function renderPantryList() {
+    var list = document.getElementById("pantry-list");
+    if (!state.pantry.length) { list.innerHTML = '<div class="empty-hint">库存为空，添加常用食材</div>'; return; }
+    var html = "";
+    state.pantry.forEach(function (p, i) {
+      var urgent = false;
+      try { urgent = (new Date(p.exp) - new Date()) <= 2 * 864e5; } catch (e) {}
+      var sub = "购入 " + p.bought + " · 保质期至 " + p.exp;
+      html += '<div class="pantry-item' + (urgent ? " urgent" : "") + '">' +
+        '<div class="pi-left">' + esc(p.name) + ' <span class="pi-sub">' + p.qty + p.unit + "</span>" +
+        (urgent ? '<span class="urgent-tag">临期</span>' : "") + '<div class="pi-sub">' + esc(sub) + "</div></div>" +
+        '<button class="pi-del" data-del="' + p.id + '">删除</button></div>';
+    });
+    list.innerHTML = html;
+    document.querySelectorAll("#pantry-list [data-del]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var id = el.getAttribute("data-del");
+        state.pantry = state.pantry.filter(function (x) { return String(x.id) !== String(id); });
+        renderPantryList();
+        api("/api/pantry/" + encodeURIComponent(id), { method: "DELETE" })
+          .catch(function () { toast("删除失败，稍后重试"); });
+      });
+    });
+  }
+
+  /* ---------- 渲染：方案（目标 + 建议 + 本周达标 + 生成） ---------- */
+  function renderPlan() {
+    if (!members().length) return;
+    var m = currentMemberObj();
+    var box = document.getElementById("page-plan");
+    var html = '<div class="card member-card" style="border-color:' + (m.color || "#888") + '55">' +
+      '<div class="mc-head"><span class="mc-avatar" style="background:' + (m.color || "#888") + '">' + (m.emoji || "👤") + "</span>" +
+      '<div><div class="mc-name">' + esc(m.name) + " 的专属方案</div>" +
+      '<div class="mc-sub">' + esc(m.relation || "") + " · " + memberAgeText(m) + " · " + (m.gender === "male" ? "男" : "女") +
+      (m.conditions && m.conditions.length ? " · 关注：" + m.conditions.map(condLabel).join("、") : "") + "</div></div></div>";
+    html += '<button class="btn btn-primary" id="gen-plan" style="margin-top:4px">✨ 生成我的周方案</button>';
+    html += '<p class="note" id="plan-note">基于年龄 / 性别 / 身体问题生成，避开过敏食材，优先命中需求标签。</p></div>';
+    html += '<div id="plan-body"></div>';
+    box.innerHTML = html;
+    document.getElementById("gen-plan").addEventListener("click", generateForMember);
+    loadPlanBody(m);
+  }
+  function condLabel(c) {
+    var map = { pregnancy: "孕期", lactation: "哺乳期", anemia: "贫血", low_calcium: "缺钙", hypertension: "高血压", diabetes: "糖尿病", hyperlipidemia: "高血脂", picky: "挑食", low_appetite: "胃口小", weak_gut: "肠胃弱", allergy_egg: "鸡蛋过敏", allergy_milk: "乳制品过敏", allergy_seafood: "海鲜过敏", allergy_nut: "坚果过敏", allergy_soy: "豆制品过敏", allergy_wheat: "麸质过敏" };
+    return map[c] || c;
+  }
+  function loadPlanBody(m) {
+    var body = document.getElementById("plan-body");
+    // 离线快照里有预烘焙的方案
+    var off = window.__OFFLINE_PLANS && window.__OFFLINE_PLANS[m.id];
+    if (off) { paintPlanBody(m, off.advice || [], off.disclaimer, true); return; }
+    api("POST", "/api/members/" + encodeURIComponent(m.id) + "/plan", { week: state.week })
+      .then(function (d) { planCache[m.id] = d; paintPlanBody(m, d.advice || [], d.disclaimer, false, d); })
+      .catch(function () { paintPlanBody(m, [], "（方案需连接后端服务后查看）", false); });
+  }
+  function paintPlanBody(m, advice, disclaimer, offline, planData) {
+    var body = document.getElementById("plan-body");
+    if (!body) return;
+    var std = (state.standards && state.standards[m.id]) || {};
+    var html = "";
+    // 目标卡
+    html += '<div class="card"><div class="card-title">每日营养目标</div><div class="target-grid">';
+    NUTRI_KEYS.forEach(function (n) {
+      html += '<div class="target-cell"><div class="v">' + Math.round(std[n.k] || 0) + '</div><div class="l">' + n.name + "</div><div class='u'>" + n.unit + "</div></div>";
+    });
+    html += "</div></div>";
+    // 建议
+    if (advice && advice.length) {
+      html += '<div class="card"><div class="card-title">饮食建议</div><ul class="advice-list">';
+      advice.forEach(function (a) { html += "<li>" + esc(a) + "</li>"; });
+      html += "</ul></div>";
+    }
+    // 本周达标追踪
+    html += '<div class="card"><div class="card-title">本周营养累计（' + esc(m.name) + "）</div>";
+    html += '<p class="note">按份量折算估算，与每日目标 ×7 对比。绿达标、黄偏低、橙偏高。</p>';
+    var acc = weekNutriFor(m.id);
+    NUTRI_KEYS.forEach(function (n) {
+      if (n.k === "folate" && (std[n.k] || 0) === 0) return;
+      var got = acc[n.k];
+      var target = (std[n.k] || 0) * 7;
+      var ratio = target > 0 ? got / target : 0;
+      var pctW = Math.min(100, Math.round(ratio * 100));
+      var cls = ratio >= 0.9 ? "ok" : (ratio > 1.1 ? "over" : "low");
+      var statusTxt = ratio >= 0.9 ? "达标" : (ratio > 1.1 ? "偏高" : "偏低");
+      html += '<div class="nutri-track"><div class="row"><span class="name">' + n.name + "</span>" +
+        '<span class="val">' + Math.round(got) + " / " + Math.round(target) + " " + n.unit + " · " + statusTxt + "</span></div>" +
+        '<div class="bar-bg"><div class="track-fg ' + cls + '" style="width:' + pctW + '%"></div></div></div>';
+    });
+    html += "</div>";
+    if (disclaimer) html += '<p class="note" style="text-align:center">' + esc(disclaimer) + "</p>";
+    body.innerHTML = html;
+    var btn = document.getElementById("gen-plan");
+    if (btn) {
+      btn.disabled = !!offline;
+      if (offline) btn.style.opacity = ".5";
+    }
+  }
+  function generateForMember() {
+    var m = currentMemberObj();
+    if (!m) return;
+    var btn = document.getElementById("gen-plan");
+    if (btn) { btn.disabled = true; btn.textContent = "生成中…"; }
+    api("POST", "/api/members/" + encodeURIComponent(m.id) + "/plan", { week: state.week })
+      .then(function (d) {
+        planCache[m.id] = d;
+        state.week = d.week;
+        return api("/api/week", { method: "PUT", body: JSON.stringify(d.week) });
+      })
+      .then(function () {
+        toast("✅ 已为 " + m.name + " 生成周方案");
+        paintPlanBody(m, planCache[m.id].advice || [], planCache[m.id].disclaimer, false, planCache[m.id]);
+        if (currentPage === "week") renderWeek();
+        if (currentPage === "today") renderToday();
+      })
+      .catch(function () { toast("生成失败，请确认服务已连接"); if (btn) { btn.disabled = false; btn.textContent = "✨ 生成我的周方案"; } });
+  }
+
+  /* ---------- 页面切换 ---------- */
+  var PAGE_TITLES = { today: "今日", week: "本周", recipes: "食谱", shopping: "采购", pantry: "库存", plan: "方案" };
+  function showPage(page) {
+    currentPage = page;
+    document.querySelectorAll(".page").forEach(function (p) { p.classList.add("hidden"); });
+    document.getElementById("page-" + page).classList.remove("hidden");
+    document.querySelectorAll(".tab").forEach(function (t) {
+      t.classList.toggle("active", t.getAttribute("data-page") === page);
+    });
+    document.getElementById("app-title").textContent = PAGE_TITLES[page];
+    if (page === "today") renderToday();
+    else if (page === "week") renderWeek();
+    else if (page === "recipes") renderRecipes();
+    else if (page === "shopping") renderShopping();
+    else if (page === "pantry") renderPantry();
+    else if (page === "plan") renderPlan();
+  }
+
+  /* ---------- 重置（仅清空勾选进度） ---------- */
+  function resetProgress() {
+    if (!confirm("确定清空采购勾选与餐次完成记录？（不影响食谱/周计划/库存/成员）")) return;
+    state.shoppingChecked = {}; state.doneMeals = {};
+    api("/api/kv/shoppingChecked", { method: "PUT", body: JSON.stringify({ value: {} }) }).catch(function () {});
+    api("/api/kv/doneMeals", { method: "PUT", body: JSON.stringify({ value: {} }) }).catch(function () {});
+    showPage(currentPage);
+    toast("进度已清空");
+  }
+
+  /* ---------- 初始化 ---------- */
+  document.querySelectorAll(".tab").forEach(function (tab) {
+    tab.addEventListener("click", function () { showPage(tab.getAttribute("data-page")); });
+  });
+  document.getElementById("btn-reset").addEventListener("click", resetProgress);
+  loadVersion();
+  loadState(function () { renderMemberBar(); showPage("today"); });
+})();
+
+</script>
+</body>
+</html>
